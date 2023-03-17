@@ -138,12 +138,12 @@ contract CryptoCarbonEnergy is IERC20, SafeMath, Action {
     /**
      * @dev mint : To increase total supply of tokens
      */
-    function mint(uint256 tokens) public onlyOwner returns (bool) {
+    function mint(address to, uint256 tokens) public onlyOwner returns (bool) {
         // Increase the total supply
         _totalSupply = safeAdd(_totalSupply, tokens);
         // Increase the balance of the contract owner
-        _balances[msg.sender] = safeAdd(_balances[msg.sender], tokens);
-        emit Transfer(address(0), msg.sender, tokens);
+        _balances[to] = safeAdd(_balances[to], tokens);
+        emit Transfer(address(0), to, tokens);
         return true;
     }
 
