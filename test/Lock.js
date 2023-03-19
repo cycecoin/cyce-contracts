@@ -50,7 +50,7 @@ describe("Crypto Carbon Energy token", function () {
 
     it("Should assign the total supply of tokens to the owner", async function () {
       const { cyceToken, owner } = await loadFixture(deployTokenFixture);
-      await  cyceToken.mint(1000)
+      await  cyceToken.mint(owner.address, 1000)
       const ownerBalance = await cyceToken.balanceOf(owner.address);
       expect(await cyceToken.totalSupply()).to.equal(ownerBalance);
     });
@@ -61,7 +61,7 @@ describe("Crypto Carbon Energy token", function () {
       const { cyceToken, owner, addr1, addr2 } = await loadFixture(
           deployTokenFixture
       );
-      await  cyceToken.mint(10000)
+     await  cyceToken.mint(owner.address, 1000)
     /* balance = await cyceToken.balanceOf(owner.address);
      console.log(Number(balance));*/
       // Transfer 50 tokens from owner to addr1
@@ -80,7 +80,7 @@ describe("Crypto Carbon Energy token", function () {
       const { cyceToken, owner, addr1, addr2 } = await loadFixture(
           deployTokenFixture
       );
-      await  cyceToken.mint(10000)
+     await  cyceToken.mint(owner.address, 1000)
       // Transfer 50 tokens from owner to addr1
       await expect(cyceToken.transfer(addr1.address, 100))
           .to.emit(cyceToken, "Transfer")
@@ -97,7 +97,7 @@ describe("Crypto Carbon Energy token", function () {
       const { cyceToken, owner, addr1 } = await loadFixture(
           deployTokenFixture
       );
-      await  cyceToken.mint(10000)
+     await  cyceToken.mint(owner.address, 1000)
       const initialOwnerBalance = await cyceToken.balanceOf(owner.address);
 
       // Try to send 1 token from addr1 (0 tokens) to owner.
@@ -116,13 +116,13 @@ describe("Crypto Carbon Energy token", function () {
       const { cyceToken, owner, addr1 } = await loadFixture(
           deployTokenFixture
       );
-      await  cyceToken.mint(10000)
+     await  cyceToken.mint(owner.address, 1000)
       const initialOwnerBalance = await cyceToken.balanceOf(owner.address);
 
 
       await expect(
-          cyceToken.transfer(addr1.address, 1000)
-      ).to.changeTokenBalances(cyceToken, [owner, addr1], [-1000, 1000]);
+          cyceToken.transfer(addr1.address, 500)
+      ).to.changeTokenBalances(cyceToken, [owner, addr1], [-500, 500]);
 
 
 
@@ -141,6 +141,7 @@ describe("Crypto Carbon Energy token", function () {
       ).to.be.revertedWith('Action: Recipient blacklisted');
 
       await  cyceToken.removeBlacklist(addr1.address)
+
       await expect(
           cyceToken.transfer(addr1.address, 0)
       ).to.be.revertedWith('Action: transfer amount has to big than 0');
@@ -157,13 +158,13 @@ describe("Crypto Carbon Energy token", function () {
       const { cyceToken, owner, addr1, addr2 } = await loadFixture(
           deployTokenFixture
       );
-      await  cyceToken.mint(10000)
+     await  cyceToken.mint(owner.address, 1000)
       await  cyceToken.pause();
 
       // Transfer 50 tokens from owner to addr1
       await expect(cyceToken.transfer(addr1.address, 100))
           .to.be.revertedWith('Action: paused');
-      await  cyceToken.unPause();
+      await  cyceToken.unpause();
 
       console.log(cyceToken.address)
       await cyceToken.transfer(cyceToken.address, 100)
@@ -182,7 +183,7 @@ describe("Crypto Carbon Energy token", function () {
     })
     it('owner hesabının bakiyesini kontrol et', async function () {
       let balance ;
-      await token.mint(100000)
+      await token.mint(owner.address, 100000)
       //await  token.mint(30000000000000);
       balance = await token.balanceOf(owner.address);
 
@@ -232,7 +233,7 @@ describe("Crypto Carbon Energy token", function () {
     });
     it('UnPause Yap', async function () {
       let balance ;
-      await  token.unPause()
+      await  token.unpause()
       await  token.transfer(addr1.address, 100)
 
       expect(false).to.equal(await  token.paused())

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.16;
 
 contract Ownable {
     address private _owner;
@@ -25,7 +25,7 @@ contract Ownable {
         return (size > 0);
     }
 
-    function transferOwnerShip(
+    function transferOwnership(
         address newOwner
     ) public onlyOwner returns (bool) {
         require(
@@ -33,7 +33,7 @@ contract Ownable {
             "Ownable: New owner address is not a contract"
         );
         require(_owner != newOwner, "Ownable: The same owner");
-        _transferOwnerShip(newOwner);
+        _transferOwnership(newOwner);
         return true;
     }
 
@@ -41,13 +41,13 @@ contract Ownable {
         return _owner;
     }
 
-    function _transferOwnerShip(address newOwner) private {
+    function _transferOwnership(address newOwner) private {
         _owner = newOwner;
         emit OwnershipTransferred(msg.sender, newOwner);
     }
 
-    function renounceOwnerShip() public onlyOwner returns (bool) {
-        _transferOwnerShip(address(0));
+    function renounceOwnership() public onlyOwner returns (bool) {
+        _transferOwnership(address(0));
         return true;
     }
 }

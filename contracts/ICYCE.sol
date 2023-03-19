@@ -1,13 +1,14 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.16;
 
-abstract contract ICYCE {
-    // Get the total supply of tokens
-    function transferOwnerShip(address newOwner) public virtual returns(bool);
-    function pause() public virtual returns(bool);
-    function unPause() public virtual returns(bool);
-    function addBlacklist(address blackAddress) public virtual returns(bool);
-    function removeBlacklist(address blackAddress) public virtual returns(bool);
-    function mint(int256 tokens) public virtual returns(bool);
-    function burn(int256 tokens) public virtual returns(bool);
+interface ICYCE {
+    function pause() external returns (bool);
+    function unpause() external returns (bool);
+
+    function transferOwnership(address newOwner) external returns (bool);
+    function addBlacklist(address blackAddress) external returns (bool);
+    function removeBlacklist(address blackAddress) external returns (bool);
+
+    function mint(address account, uint256 amount) external returns (bool);
+    function burn(uint256 amount) external returns (bool);
 }

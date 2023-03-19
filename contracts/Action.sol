@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.16;
 import "./Ownable.sol";
 
 contract Action is Ownable {
@@ -15,10 +15,7 @@ contract Action is Ownable {
         _pause = false;
     }
 
-    modifier isNotBlacklist() {
-        require(!_blacklist[msg.sender]);
-        _;
-    }
+
 
     function pause() public onlyOwner {
         require(!_pause, "Action: already pause");
@@ -26,7 +23,7 @@ contract Action is Ownable {
         emit Pause(msg.sender);
     }
 
-    function unPause() public onlyOwner {
+    function unpause() public onlyOwner {
         require(_pause, "Action: already  unpause");
         _pause = false;
         emit UnPause(msg.sender);
