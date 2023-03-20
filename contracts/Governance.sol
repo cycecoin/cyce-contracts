@@ -124,6 +124,7 @@ contract Governance {
         }
 
     }
+
     function _execute() private {
         if(targetType == TargetType.MINT){
             cyceToken.mint(account, amount);

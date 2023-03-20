@@ -17,16 +17,18 @@ contract Action is Ownable {
 
 
 
-    function pause() public onlyOwner {
+    function pause() public onlyOwner returns(bool) {
         require(!_pause, "Action: already pause");
         _pause = true;
         emit Pause(msg.sender);
+        return true;
     }
 
-    function unpause() public onlyOwner {
+    function unpause() public onlyOwner returns(bool) {
         require(_pause, "Action: already  unpause");
         _pause = false;
         emit UnPause(msg.sender);
+        return true;
     }
 
     function paused() public view returns (bool) {
@@ -36,6 +38,7 @@ contract Action is Ownable {
     function addBlacklist(
         address blackAddress
     ) public onlyOwner returns (bool) {
+        require(!_blacklist[blackAddress], "Action: already blacklisted");
         _blacklist[blackAddress] = true;
         emit AddBlacklist(blackAddress);
         return true;
@@ -44,6 +47,7 @@ contract Action is Ownable {
     function removeBlacklist(
         address blackAddress
     ) public onlyOwner returns (bool) {
+        require(_blacklist[blackAddress], 'Action: not blacklisted');
         _blacklist[blackAddress] = false;
         emit RemoveBlacklist(blackAddress);
         return true;
