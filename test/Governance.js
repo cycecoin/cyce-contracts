@@ -18,7 +18,13 @@ describe("Crypto Carbon Energy token", function () {
         const Token = await ethers.getContractFactory("CryptoCarbonEnergy");
 
         const [owner, addr1, addr2, addr3, addr4, addr5] = await ethers.getSigners();
-
+        const TargetType = {   MINT : 0,
+            BURN : 1,
+            PAUSE : 2,
+            UN_PAUSE :3,
+            TRANSFER_OWNERSHIP : 4,
+            ADD_BLACKLIST : 5,
+            REMOVE_BLACKLIST : 6}
         // To deploy our contract, we just have to call Token.deploy() and await
         // its deployed() method, which happens once its transaction has been
         // mined.
@@ -34,7 +40,7 @@ describe("Crypto Carbon Energy token", function () {
         console.log(await cyceToken.owner(), owner.address);
 
         // Fixtures can return anything you Ïconsider useful for your tests
-        return {Token, cyceToken, governanceContract, owner, addr1, addr2, addr3, addr4, addr5};
+        return {TargetType, Token, cyceToken, governanceContract, owner, addr1, addr2, addr3, addr4, addr5};
     }
 
 
@@ -43,13 +49,30 @@ describe("Crypto Carbon Energy token", function () {
         it("Should set transferownership", async function () {
             // We use loadFixture to setup our environment, and then assert that
             // things went well
-            const {cyceToken, owner, governanceContract, addr1, addr2, addr3, addr4, addr5} = await loadFixture(deployTokenFixture);
-            await cyceToken.mint(governanceContract.address, 1000)
+            const {TargetType, cyceToken, owner, governanceContract, addr1, addr2, addr3, addr4, addr5} = await loadFixture(deployTokenFixture);
+            await cyceToken.mint(addr1.address, 1000)
             await cyceToken.transferOwnership(governanceContract.address)
             //await cyceToken.unpause()
          //  expect(await cyceToken.transferOwnership(governanceContract.address)).to.equal(true)
-            await governanceContract.mint(100)
-           console.log(await cyceToken.balanceOf(governanceContract.address));
+          //  await governanceContract.connect(addr1)["startVoting(uint8)"](TargetType.PAUSE);
+
+           // await governanceContract.connect(addr1)["startVoting(uint8,address,uint256)"](TargetType.MINT, addr1.address, 1000);
+            await governanceContract.connect(addr1)["startVoting(uint8,address)"](TargetType.TRANSFER_OWNERSHIP, addr1.address);
+            await governanceContract.connect(addr1).vote(false);
+            await governanceContract.connect(addr2).vote(true);
+            await governanceContract.connect(addr3).vote(true);
+            await governanceContract.connect(addr4).vote(true);
+            await governanceContract.connect(addr5).vote(false);
+            await network.provider.send("evm_increaseTime", [3600 * 24 * 180])
+            await network.provider.send("evm_mine")
+            await expect(
+                 governanceContract.connect(addr1).endVoting()
+            ).to.be.revertedWith('Ownable: New owner address is not a contract');
+          //  console.log(await governanceContract.targetType())
+
+            await governanceContract.connect(addr1).resetVoting();
+            console.log(await governanceContract.isVotingOpen())
+           console.log(await cyceToken.balanceOf(addr1.address));
             expect(await cyceToken.owner()).to.equal(governanceContract.address);
         });
 

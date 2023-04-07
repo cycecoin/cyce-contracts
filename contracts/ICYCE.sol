@@ -11,4 +11,6 @@ interface ICYCE {
 
     function mint(address account, uint256 amount) external returns (bool);
     function burn(uint256 amount) external returns (bool);
+    function blacklisted(address account) external view returns(bool);
+    function paused() external view returns(bool);
 }

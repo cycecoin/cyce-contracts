@@ -6,7 +6,6 @@ import "./SafeMath.sol";
 
 /*
 
-
    _____   _______   _____ _____ ___     ___   _   ___ ___  ___  _  _   ___ _  _ ___ ___  _____   __
   / __\ \ / / _ \ \ / / _ \_   _/ _ \   / __| /_\ | _ \ _ )/ _ \| \| | | __| \| | __| _ \/ __\ \ / /
  | (__ \ V /|   /\ V /|  _/ | || (_) | | (__ / _ \|   / _ \ (_) | .` | | _|| .` | _||   / (_ |\ V /
@@ -128,7 +127,7 @@ contract CryptoCarbonEnergy is IERC20, SafeMath, Action {
         // Function call for any additional logic to be executed before the transfer
         _beforeTransferToken(from, to, amount);
         // Decrement the transferor's balance
-        _balances[from] = safeSub(_balances[msg.sender], amount);
+        _balances[from] = safeSub(_balances[from], amount);
         // Increment the recipient's balance
         _balances[to] = safeAdd(_balances[to], amount);
         emit Transfer(from, to, amount);
