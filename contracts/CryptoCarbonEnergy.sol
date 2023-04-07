@@ -63,7 +63,7 @@ contract CryptoCarbonEnergy is IERC20, SafeMath, Action {
     }
 
     // Function to get the decimal places of the token
-    function decimals() public view returns (uint8) {
+    function decimals() public pure returns (uint8) {
         return 6;
     }
 
